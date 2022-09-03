@@ -26,6 +26,10 @@ app.get("/login", (req, res) => {
   res.redirect(`https://accounts.spotify.com/authorize?${queryParams}`);
 });
 
+app.get('/',(req,res)=> {
+    res.send("This is a working api")
+})
+
 app.get("/callback", (req, res) => {
   const code = req.query.code || null;
   axios({
