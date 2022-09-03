@@ -26,10 +26,12 @@ app.get("/login", (req, res) => {
   res.redirect(`https://accounts.spotify.com/authorize?${queryParams}`);
 });
 
-app.get('/',(req,res)=> {
-    res.send("This is a working api")
-})
+// default route
+app.get("/", (req, res) => {
+  res.send("This is a working api");
+});
 
+//main callback
 app.get("/callback", (req, res) => {
   const code = req.query.code || null;
   axios({
@@ -49,20 +51,7 @@ app.get("/callback", (req, res) => {
   })
     .then((response) => {
       if (response.status === 200) {
-        const { access_token, token_type } = response.data;
-
-        axios
-          .get("https://api.spotify.com/v1/me", {
-            headers: {
-              Authorization: `${token_type} ${access_token}`,
-            },
-          })
-          .then((response) => {
-            res.send(`<pre>${JSON.stringify(response.data, null, 2)}</pre>`);
-          })
-          .catch((error) => {
-            res.send(error);
-          });
+        res.json(response.data);
       } else {
         res.send(response);
       }
@@ -71,9 +60,11 @@ app.get("/callback", (req, res) => {
       res.send(error);
     });
 });
+
+//Refresh token route
 app.get("/refresh_token", (req, res) => {
   const { refresh_token } = req.query;
-
+  console.log("It got into this shit ");
   axios({
     method: "post",
     url: "https://accounts.spotify.com/api/token",
@@ -95,4 +86,5 @@ app.get("/refresh_token", (req, res) => {
       res.send(error);
     });
 });
+
 app.listen(process.env.PORT || port);
