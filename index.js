@@ -51,9 +51,15 @@ app.get("/callback", (req, res) => {
   })
     .then((response) => {
       if (response.status === 200) {
-        res.json(response.data);
+        const { access_token, refresh_token,expires_in } = response.data;
+        const queryParams = querystring.stringify({
+          access_token,
+          refresh_token,
+          expires_in
+        });
+        res.redirect(`http://localhost:3000/?${queryParams}`);
       } else {
-        res.send(response);
+        res.redirect(`/?${querystring.stringify({error: "Invalid access token"})}`);
       }
     })
     .catch((error) => {
