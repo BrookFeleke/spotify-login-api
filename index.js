@@ -1,6 +1,7 @@
 require("dotenv").config();
 const express = require("express");
 const app = express();
+var cors = require('cors')
 const querystring = require("querystring");
 const axios = require("axios");
 const { generateRandomString } = require("./utils");
@@ -8,9 +9,11 @@ const port = 8888;
 const CLIENT_ID = process.env.CLIENT_ID;
 const CLIENT_SECRET = process.env.CLIENT_SECRET;
 const REDIRECT_URI = process.env.REDIRECT_URI;
+app.use(cors())
 
 const stateKey = "spotify_auth_state";
-const scope = "user-read-private user-read-email";
+const scope =
+  "user-read-private user-read-email user-read-recently-played user-read-playback-position user-top-read user-library-modify user-library-read playlist-read-collaborative playlist-modify-public playlist-read-private user-follow-read user-follow-modify";
 app.get("/login", (req, res) => {
   const state = generateRandomString(16);
   console.log({ state });
@@ -34,6 +37,7 @@ app.get("/", (req, res) => {
 //main callback
 app.get("/callback", (req, res) => {
   const code = req.query.code || null;
+
   axios({
     method: "post",
     url: "https://accounts.spotify.com/api/token",
@@ -51,15 +55,17 @@ app.get("/callback", (req, res) => {
   })
     .then((response) => {
       if (response.status === 200) {
-        const { access_token, refresh_token,expires_in } = response.data;
+        const { access_token, refresh_token, expires_in } = response.data;
         const queryParams = querystring.stringify({
           access_token,
           refresh_token,
-          expires_in
+          expires_in,
         });
-        res.redirect(`http://localhost:3000/?${queryParams}`);
+        res.redirect(`${process.env.APP_URI}/?${queryParams}`);
       } else {
-        res.redirect(`/?${querystring.stringify({error: "Invalid access token"})}`);
+        res.redirect(
+          `/?${querystring.stringify({ error: "Invalid access token" })}`
+        );
       }
     })
     .catch((error) => {
