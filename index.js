@@ -12,12 +12,12 @@ const REDIRECT_URI = process.env.REDIRECT_URI;
 // app.use(cors({
 //   origin:"*"
 // }))
-app.use((req, res, next) => {
+const corsy = (req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", `${process.env.MY_DOMAIN}`); // update to match the domain you will make the request from
   res.setHeader("Access-Control-Allow-Headers", "*");
   res.setHeader("Access-Control-Allow-Methods", "*");
   next();
-});
+};
 
 // app.use(function(req, res, next) {
 //   res.header("Access-Control-Allow-Origin", `${process.env.MY_DOMAIN}`); // update to match the domain you will make the request from
