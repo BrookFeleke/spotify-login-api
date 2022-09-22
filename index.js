@@ -79,8 +79,14 @@ app.get("/callback", (req, res) => {
     });
 });
 
+const corsy = (req, res, next)=> {
+    res.header("Access-Control-Allow-Origin", `${process.env.MY_DOMAIN}`); // update to match the domain you will make the request from
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+  };
+
 //Refresh token route
-app.get("/refresh_token", (req, res) => {
+app.get("/refresh_token",corsy, (req, res) => {
   const { refresh_token } = req.query;
   console.log("It got into this shit ");
   axios({
