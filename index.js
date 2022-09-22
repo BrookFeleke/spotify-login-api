@@ -13,7 +13,7 @@ const REDIRECT_URI = process.env.REDIRECT_URI;
 //   origin:"*"
 // }))
 const corsy = (req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", `${process.env.MY_DOMAIN}`); // update to match the domain you will make the request from
+  res.setHeader("Access-Control-Allow-Origin", "*"); // update to match the domain you will make the request from
   res.setHeader("Access-Control-Allow-Headers", "*");
   res.setHeader("Access-Control-Allow-Methods", "*");
   next();
