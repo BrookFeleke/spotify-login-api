@@ -9,9 +9,16 @@ const port = 8888;
 const CLIENT_ID = process.env.CLIENT_ID;
 const CLIENT_SECRET = process.env.CLIENT_SECRET;
 const REDIRECT_URI = process.env.REDIRECT_URI;
-app.use(cors({
-  origin:"*"
-}))
+// app.use(cors({
+//   origin:"*"
+// }))
+app.use((req, res, next) => {
+  res.setHeader("Access-Control-Allow-Origin", "*"); // update to match the domain you will make the request from
+  res.setHeader("Access-Control-Allow-Headers", "*");
+  res.setHeader("Access-Control-Allow-Methods", "*");
+  next();
+});
+
 // app.use(function(req, res, next) {
 //   res.header("Access-Control-Allow-Origin", `${process.env.MY_DOMAIN}`); // update to match the domain you will make the request from
 //   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
@@ -79,11 +86,6 @@ app.get("/callback", (req, res) => {
     });
 });
 
-const corsy = (req, res, next)=> {
-    res.header("Access-Control-Allow-Origin", `${process.env.MY_DOMAIN}`); // update to match the domain you will make the request from
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    next();
-  };
 
 //Refresh token route
 app.get("/refresh_token",corsy, (req, res) => {
