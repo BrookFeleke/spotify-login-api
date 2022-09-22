@@ -9,12 +9,14 @@ const port = 8888;
 const CLIENT_ID = process.env.CLIENT_ID;
 const CLIENT_SECRET = process.env.CLIENT_SECRET;
 const REDIRECT_URI = process.env.REDIRECT_URI;
-// app.use(cors())
-app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", `${process.env.MY_DOMAIN}`); // update to match the domain you will make the request from
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  next();
-});
+app.use(cors({
+  origin:"*"
+}))
+// app.use(function(req, res, next) {
+//   res.header("Access-Control-Allow-Origin", `${process.env.MY_DOMAIN}`); // update to match the domain you will make the request from
+//   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+//   next();
+// });
 const stateKey = "spotify_auth_state";
 const scope =
   "user-read-private user-read-email user-read-recently-played user-read-playback-position user-top-read user-library-modify user-library-read playlist-read-collaborative playlist-modify-public playlist-read-private user-follow-read user-follow-modify";
