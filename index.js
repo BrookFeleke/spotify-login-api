@@ -9,10 +9,11 @@ const port = 8888;
 const CLIENT_ID = process.env.CLIENT_ID;
 const CLIENT_SECRET = process.env.CLIENT_SECRET;
 const REDIRECT_URI = process.env.REDIRECT_URI;
-// app.use(cors({
-//   origin:"*"
-// }))
+app.use(cors({
+  origin:"*"
+}))
 const corsy = (req, res, next) => {
+  console.log("It is in the middleware");
   res.setHeader("Access-Control-Allow-Origin", "*"); // update to match the domain you will make the request from
   res.setHeader("Access-Control-Allow-Headers", "*");
   res.setHeader("Access-Control-Allow-Methods", "*");
@@ -106,6 +107,7 @@ app.get("/refresh_token",corsy, (req, res) => {
     },
   })
     .then((response) => {
+      console.log(response.data);
       res.send(response.data);
     })
     .catch((error) => {
